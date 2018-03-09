@@ -9,33 +9,57 @@ function setCart(c) {
   return cart;
 }
 
-function addToCart(itemName) {
-  var itemPrice = Math.floor(Math.random() * (100 - 1)) + 1;
-  cart.push({ [itemName]: itemPrice });
-  console.log(`${itemName} has been added to your cart.`);
+function addToCart(item) {
+  const price = Math.floor(Math.random() * 100) + 1;
+
+  cart.push({ [item]: price });
+
+  console.log(`${item} has been added to your cart.`);
+
   return cart;
 }
 
 function viewCart() {
-  if(cart.length === 0){
-    return console.log('Your shopping cart is empty.');
-  } else if(cart.length === 1){
-    console.log(`In your cart, you have ${Object.keys(cart[0])} at $${cart[0][Object.keys(cart[0])]}.`)
-  } else if(cart.length === 2){
-    console.log(`In your cart, you have ${Object.keys(cart[cart.length-2])} at $${cart[cart.length-2][Object.keys(cart[cart.length-2])]} and ${Object.keys(cart[cart.length-1])} at $${cart[cart.length-1][Object.keys(cart[cart.length-1])]}.`)
-  } else if (cart.length >= 3){
-    var itemsAndPrices = [];
-    for (var i = 0; i < cart.length; i++) {
-      itemsAndPrices.push(`${Object.keys(cart[i])} at $${cart[i][Object.keys(cart[i])]}`)
-    }
-    var threeOrMore = itemsAndPrices.slice(0,-1).join(', ')+', and '+ itemsAndPrices.slice(-1);
-    //debugger;
-    console.log(`In your cart, you have ${threeOrMore}.`)
+  const l = cart.length;
+
+  if (!l) {
+    return console.log("Your shopping cart is empty.");
   }
+
+  let itemsAndPrices = [];
+
+  for (let i = 0; i < l; i++) {
+    let itemAndPrice = cart[i];
+    let item = Object.keys(itemAndPrice)[0];
+    let price = itemAndPrice[item];
+
+    itemsAndPrices.push(`${item} at \$${price}`);
+  }
+
+  switch(itemsAndPrices.length) {
+    case 1:
+      break;
+    case 2:
+      itemsAndPrices = itemsAndPrices.join(" and ");
+      break;
+    default:
+      itemsAndPrices[l-1] = "and ".concat(itemsAndPrices[l-1]);
+      itemsAndPrices = itemsAndPrices.join(", ");
+  }
+
+  console.log(`In your cart, you have ${itemsAndPrices}.`);
 }
 
 function total() {
-  // write your code here
+  let t = 0;
+
+  for (let i = 0, l = cart.length; i < l; i++) {
+    for (let item in cart[i]) {
+      t += cart[i][item];
+    }
+  }
+
+  return t;
 }
 
 function removeFromCart(item) {
